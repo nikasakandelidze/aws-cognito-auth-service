@@ -3,7 +3,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { CognitoUser, ISignUpResult } from 'amazon-cognito-identity-js';
 import { handleCognitoError } from './commons/errorHandler';
 import { AuthInputpDto, ConfirmUserDto } from './dto/auth.dto';
-import { User } from './dto/users.dto';
+import { User, UserSyncDto } from './dto/users.dto';
 import { AuthService } from './providers/auth.provider';
 import { UserService } from './providers/users.providers';
 
@@ -74,5 +74,13 @@ export class AppService {
       .filterUsers()
       .catch(handleCognitoError);
     return result;
+  }
+
+  async syncUser(syncUserDto: UserSyncDto) {
+    return await this.userService.syncUserToLocalDb(syncUserDto);
+  }
+
+  async getSyncedUsers() {
+    return await this.userService.getSyncedUsers();
   }
 }

@@ -1,6 +1,7 @@
 import { Body, Controller, Post, Get, Headers } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AuthInputpDto, ConfirmUserDto } from './dto/auth.dto';
+import { UserSyncDto } from './dto/users.dto';
 
 @Controller('api')
 export class AppController {
@@ -28,5 +29,15 @@ export class AppController {
   @Get('users')
   async filterUsers() {
     return await this.appService.filterForUsers();
+  }
+
+  @Post('users/sync')
+  async syncLocally(@Body() userSyncDto: UserSyncDto) {
+    return await this.appService.syncUser(userSyncDto);
+  }
+
+  @Get('users/sync')
+  async getSyncedUsers() {
+    return await this.appService.getSyncedUsers();
   }
 }

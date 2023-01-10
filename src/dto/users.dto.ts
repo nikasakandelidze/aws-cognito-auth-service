@@ -4,3 +4,9 @@ export class User {
   verified: boolean;
   sub: string;
 }
+
+export class UserSyncDto {
+  email: string;
+  name: string;
+  roles: Array<string>;
+}

@@ -6,11 +6,23 @@ import { AuthService } from './providers/auth.provider';
 import { CognitoIdentityProviderClient } from '@aws-sdk/client-cognito-identity-provider';
 import { UserService } from './providers/users.providers';
 import { AwsConfigService } from './providers/aws.config.provider';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmConfigService } from './repository/TypeormConfig';
+import { UserEntity } from './repository/user.entity';
+import { RoleEntity } from './repository/role.entity';
 
 const DEFAULT_REGION = 'us-east-1';
 
 @Module({
-  imports: [ConfigModule.forRoot({ envFilePath: '.development.env' })],
+  imports: [
+    ConfigModule.forRoot({ envFilePath: '.development.env' }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useClass: TypeOrmConfigService,
+    }),
+    TypeOrmModule.forFeature([UserEntity, RoleEntity]),
+  ],
   controllers: [AppController],
   providers: [
     AppService,
